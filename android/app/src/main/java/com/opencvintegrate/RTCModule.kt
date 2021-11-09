@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import java.io.InputStream
 
 import android.net.Uri
+import android.util.Log
 import androidx.annotation.Nullable
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
@@ -22,10 +23,20 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
         return "NativeLibModule"
     }
 
-    init {
-        NativeLib.load {
-            print(bitmapToBase64(it))
-            onUpdateListener(it)
+    private fun sendEvent(reactContext: ReactContext,
+                          eventName: String,
+                          @Nullable params: WritableMap) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+                .emit(eventName, params)
+    }
+
+    @ReactMethod
+    fun init(){
+        NativeLib.init {
+            if(it!= null) {
+                onUpdateListener(it)
+            }
         }
     }
 
@@ -36,20 +47,17 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
         sendEvent(context, OSNotificationEventTypes.UpdatedImage.name, params)
     }
 
-    private fun sendEvent(reactContext: ReactContext,
-                          eventName: String,
-                          @Nullable params: WritableMap) {
-        reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit(eventName, params)
-    }
-
     @ReactMethod
     fun toGray(imageUrl: String, promise: Promise) {
         try {
             val uri = Uri.parse(imageUrl)
             val bitmap = bitmapFromUri(uri)
-            NativeLib.toGray(bitmap)
+
+            if(bitmap != null) {
+                NativeLib.toGray(bitmap)
+            } else {
+                Log.e("BITMAP_NULL", "")
+            }
 
             promise.resolve(imageUrl)
         } catch (e: Exception) {
@@ -67,9 +75,8 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
     @Throws(Exception::class)
     fun bitmapFromUri(uri: Uri?): Bitmap? {
         return try {
-
             val inputStream: InputStream? = uri?.let { context.contentResolver.openInputStream(it) }
-            val bitmap = Bitmap.createBitmap(BitmapFactory.decodeStream(inputStream))
+            val bitmap = Bitmap.createBitmap(BitmapFactory.decodeStream(inputStream)).copy(Bitmap.Config.ARGB_8888, true)
 
             inputStream?.close()
             bitmap

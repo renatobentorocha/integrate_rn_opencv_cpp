@@ -3,6 +3,7 @@
 #include <jni.h>
 #include <android/log.h>
 #include <android/bitmap.h>
+#include "iostream"
 
 using namespace cv;
 
@@ -22,18 +23,22 @@ void l(String val) {
     __android_log_print(ANDROID_LOG_DEBUG, "PQN", "%s", val.c_str());
 }
 
-void bitmapToMat(jobject bitmap, Mat m_addr, jboolean needUnPremultiplyAlpha) {
-    AndroidBitmapInfo info;
-    void *pixels = 0;
-    Mat dst = m_addr;
+void bitmapToMat(jobject bitmap, Mat &dst, bool needUnPremultiplyAlpha)
+{
+    AndroidBitmapInfo  info;
+    void*              pixels = 0;
 
     try {
         l("nBitmapToMat");
         CV_Assert( AndroidBitmap_getInfo(jsim.env, bitmap, &info) >= 0 );
+        l("AndroidBitmap_getInfo(jsim.env, bitmap, &info) >= 0");
         CV_Assert( info.format == ANDROID_BITMAP_FORMAT_RGBA_8888 ||
                    info.format == ANDROID_BITMAP_FORMAT_RGB_565 );
+        l("nBitmapToMat - ANDROID_BITMAP_FORMAT_RGBA_8888 || ANDROID_BITMAP_FORMAT_RGB_565");
         CV_Assert( AndroidBitmap_lockPixels(jsim.env, bitmap, &pixels) >= 0 );
+        l("AndroidBitmap_lockPixels(jsim.env, bitmap, &pixels) >= 0");
         CV_Assert( pixels );
+        l("nBitmapToMat - pixels");
         dst.create(info.height, info.width, CV_8UC4);
         if( info.format == ANDROID_BITMAP_FORMAT_RGBA_8888 )
         {
@@ -52,19 +57,22 @@ void bitmapToMat(jobject bitmap, Mat m_addr, jboolean needUnPremultiplyAlpha) {
     } catch(const cv::Exception& e) {
         AndroidBitmap_unlockPixels(jsim.env, bitmap);
         l(e.err);
+        jclass je = jsim.env->FindClass("java/lang/Exception");
+        jsim.env->ThrowNew(je, e.what());
         return;
     } catch (...) {
         AndroidBitmap_unlockPixels(jsim.env, bitmap);
         l("nBitmapToMat caught unknown exception (...)");
+        jclass je = jsim.env->FindClass("java/lang/Exception");
+        jsim.env->ThrowNew(je, "Unknown exception in JNI code {nBitmapToMat}");
         return;
     }
 }
 
-void matToBitmap(Mat m_addr, jobject bitmap, jboolean needPremultiplyAlpha)
+void matToBitmap(Mat &src, jobject bitmap, bool needPremultiplyAlpha)
 {
     AndroidBitmapInfo  info;
-    void *pixels = 0;
-    Mat src = m_addr;
+    void*              pixels = 0;
 
     try {
         l("nMatToBitmap");
@@ -110,16 +118,20 @@ void matToBitmap(Mat m_addr, jobject bitmap, jboolean needPremultiplyAlpha)
     } catch(const cv::Exception& e) {
         AndroidBitmap_unlockPixels(jsim.env, bitmap);
         l(e.err);
+        jclass je = jsim.env->FindClass("java/lang/Exception");
+        jsim.env->ThrowNew(je, e.what());
         return;
     } catch (...) {
         AndroidBitmap_unlockPixels(jsim.env, bitmap);
         l("nMatToBitmap caught unknown exception (...)");
+        jclass je = jsim.env->FindClass("java/lang/Exception");
+        jsim.env->ThrowNew(je, "Unknown exception in JNI code {nMatToBitmap}");
         return;
     }
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_load(JNIEnv *env, jclass clazz, jobject on_update_listener) {
+JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_init(JNIEnv *env, jclass clazz, jobject on_update_listener) {
     jsim.env = env;
     jdrawer.callback = jsim.env->NewGlobalRef(on_update_listener);
     jdrawer.method = jsim.env->GetMethodID(env->GetObjectClass(jdrawer.callback), "onUpdate", "(Landroid/graphics/Bitmap;)V");
@@ -127,11 +139,11 @@ JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_load(JNIEnv *env, 
 
 extern "C"
 JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_toGray(JNIEnv *env, jclass clazz, jobject bitmap) {
-    jsim.env = env;
-    Mat mat;
+    Mat mat = Mat();
     bitmapToMat(bitmap, mat, false);
 
-    cvtColor(mat, mat, COLOR_RGBA2GRAY);
+    cvtColor(mat, mat, COLOR_BGR2GRAY);
+
     matToBitmap(mat, bitmap, false);
     jsim.env->CallVoidMethod(jdrawer.callback, jdrawer.method, bitmap);
 }
