@@ -14,7 +14,10 @@ type UpdateSubscription = {
 
 type NativeLibProps = {
   init: () => void;
-  toGray: (imageUrl: string) => Promise<void>;
+  load: (imageUrl: string, exif: number) => Promise<void>;
+  toGray: () => Promise<void>;
+  connectedComponents: () => Promise<void>;
+  toOriginal: () => Promise<void>;
   subscribeToUpdate: (
     handler: (event: UpdateSubscription) => void,
   ) => EmitterSubscription;
@@ -28,8 +31,20 @@ export function useNativeLib() {
     NativeLibModule.init();
   }
 
-  function toGray(imageUrl: string) {
-    NativeLibModule.toGray(imageUrl);
+  function load(imageUrl: string, exif: number) {
+    NativeLibModule.load(imageUrl, exif);
+  }
+
+  function toGray() {
+    NativeLibModule.toGray();
+  }
+
+  function connectedComponents() {
+    NativeLibModule.connectedComponents();
+  }
+
+  function toOriginal() {
+    NativeLibModule.toOriginal();
   }
 
   function subscribeToUpdate(handler: (event: UpdateSubscription) => void) {
@@ -38,7 +53,10 @@ export function useNativeLib() {
 
   return {
     init,
+    load,
     toGray,
+    connectedComponents,
+    toOriginal,
     subscribeToUpdate,
   };
 }

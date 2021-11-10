@@ -14,6 +14,7 @@ struct JavaCallback {
 
 struct JavaSimulator {
     JNIEnv *env;
+    Mat mat;
 };
 
 static JavaCallback jdrawer;
@@ -138,12 +139,77 @@ JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_init(JNIEnv *env, 
 }
 
 extern "C"
-JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_toGray(JNIEnv *env, jclass clazz, jobject bitmap) {
+JNIEXPORT void JNICALL Java_com_opencvintegrate_jni_NativeLib_load(JNIEnv *env, jclass clazz, jobject bitmap) {
     Mat mat = Mat();
     bitmapToMat(bitmap, mat, false);
+    jsim.mat = mat;
+    jsim.env->CallVoidMethod(jdrawer.callback, jdrawer.method, bitmap);
+}
 
-    cvtColor(mat, mat, COLOR_BGR2GRAY);
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_opencvintegrate_jni_NativeLib_toGray(JNIEnv *env, jclass clazz, jobject bitmap) {
+    Mat mat = Mat();
+    cvtColor(jsim.mat, mat, COLOR_BGR2GRAY);
 
     matToBitmap(mat, bitmap, false);
+
+    jsim.env->CallVoidMethod(jdrawer.callback, jdrawer.method, bitmap);
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_opencvintegrate_jni_NativeLib_connectedComponents(JNIEnv *env, jclass clazz, jobject bitmap) {
+    Mat img = jsim.mat;
+
+    cv::Mat result;
+    img.copyTo(result);
+
+    // Create binary image from source image
+    cv::Mat bw;
+    cv::cvtColor(img, bw, cv::COLOR_BGR2GRAY);
+    cv::threshold(bw, bw, 0, 255, cv::THRESH_BINARY_INV + cv::THRESH_OTSU);
+
+    // Perform the distance transform algorithm
+    cv::Mat dist;
+    cv::distanceTransform(bw, dist, cv::DIST_L2, 5);
+
+    // Normalize the distance image for range = {0.0, 1.0}
+    // so we can visualize and threshold it
+    cv::normalize(dist, dist, 0, 1., cv::NORM_MINMAX);
+
+    // Threshold to obtain the peaks
+    // This will be the markers for the foreground objects
+    cv::threshold(dist, dist, 0, 255, cv::THRESH_BINARY);
+
+    cv::Mat markers(img.size(), CV_32S);
+    dist.convertTo(dist, CV_8UC1);
+    int nLabels = cv::connectedComponents(dist, markers, 8);
+
+    cv::Mat markers_cp = markers.clone();
+    markers_cp.convertTo(markers_cp, CV_8UC1);
+
+    std::vector<cv::Vec3b> colors(nLabels);
+    colors[0] = cv::Vec3b(0, 0, 0); //background
+
+    for (int label = 1; label < nLabels; ++label)
+    {
+        colors[label] = cv::Vec3b((rand() & 255), (rand() & 255), (rand() & 255));
+    }
+
+    cv::Mat dst(img.size(), CV_8UC3);
+
+    for (int r = 0; r < dst.rows; ++r)
+    {
+        for (int c = 0; c < dst.cols; ++c)
+        {
+            int label = markers.at<int>(r, c);
+            cv::Vec3b &pixel = dst.at<cv::Vec3b>(r, c);
+            pixel = colors[label];
+        }
+    }
+
+    matToBitmap(dst, bitmap, false);
+
     jsim.env->CallVoidMethod(jdrawer.callback, jdrawer.method, bitmap);
 }

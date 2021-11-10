@@ -6,6 +6,7 @@ import com.facebook.react.bridge.*
 import com.opencvintegrate.jni.NativeLib
 import java.io.ByteArrayOutputStream
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 
 import java.io.InputStream
 
@@ -13,12 +14,16 @@ import android.net.Uri
 import android.util.Log
 import androidx.annotation.Nullable
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import android.media.ExifInterface
 
 enum class OSNotificationEventTypes {
     UpdatedImage,
 }
 
 class RTCModule (private var context: ReactApplicationContext): ReactContextBaseJavaModule(context) {
+    private lateinit var original: Bitmap
+    private lateinit var copy: Bitmap
+
     override fun getName(): String {
         return "NativeLibModule"
     }
@@ -48,18 +53,52 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
     }
 
     @ReactMethod
-    fun toGray(imageUrl: String, promise: Promise) {
+    fun load(imageUrl: String, exif: Int, promise: Promise) {
         try {
             val uri = Uri.parse(imageUrl)
             val bitmap = bitmapFromUri(uri)
 
             if(bitmap != null) {
-                NativeLib.toGray(bitmap)
+                this.original = bitmap.copy(bitmap.config, true)
+                val rotated = rotate(bitmap, bitmap.width, bitmap.height, getDegreeImageOrientation(exif))
+
+                if (rotated != null) {
+                    this.copy = rotated.copy(rotated.config, true)
+                }
+
+                NativeLib.load(rotated)
             } else {
                 Log.e("BITMAP_NULL", "")
             }
 
             promise.resolve(imageUrl)
+        } catch (e: Exception) {
+            promise.reject("LOAD_ERROR", e.message)
+        }
+    }
+
+    @ReactMethod
+    fun toGray(promise: Promise) {
+        try {
+            NativeLib.toGray(copy)
+        } catch (e: Exception) {
+            promise.reject("LOAD_ERROR", e.message)
+        }
+    }
+
+    @ReactMethod
+    fun connectedComponents(promise: Promise) {
+        try {
+            NativeLib.connectedComponents(copy)
+        } catch (e: Exception) {
+            promise.reject("LOAD_ERROR", e.message)
+        }
+    }
+
+    @ReactMethod
+    fun toOriginal(promise: Promise) {
+        try {
+            onUpdateListener(original)
         } catch (e: Exception) {
             promise.reject("LOAD_ERROR", e.message)
         }
@@ -83,5 +122,27 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
         } catch (e: Exception) {
             throw e
         }
+    }
+
+    fun getDegreeImageOrientation(exif: Int): Int {
+        return exifToDegrees(exif)
+    }
+
+    private fun exifToDegrees(exifOrientation: Int): Int {
+        return if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            90
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            180
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            270
+        } else {
+            0
+        }
+    }
+
+    fun rotate(bitmap: Bitmap?, width: Int, height: Int, degrees: Int): Bitmap? {
+        val matrix = Matrix()
+        matrix.postRotate(degrees.toFloat())
+        return Bitmap.createBitmap(bitmap!!, 0, 0, width, height, matrix, true)
     }
 }
