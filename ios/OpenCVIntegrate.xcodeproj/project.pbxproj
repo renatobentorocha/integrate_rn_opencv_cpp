@@ -11,6 +11,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5E036F48273DBC63002A2857 /* RCTEventEmmiter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E036F47273DBC63002A2857 /* RCTEventEmmiter.m */; };
+		5E036F53273DC3EE002A2857 /* Broker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5E036F52273DC3EE002A2857 /* Broker.mm */; };
+		5E036F5B273DCC24002A2857 /* Drawer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5E036F59273DCC24002A2857 /* Drawer.cpp */; };
 		748962693905CCC38196D924 /* libPods-OpenCVIntegrate-OpenCVIntegrateTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 383ED34B805DA0709AA8EA19 /* libPods-OpenCVIntegrate-OpenCVIntegrateTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		EE51F62EABFEF203D2982554 /* libPods-OpenCVIntegrate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D21D943AEED1C8038D0F0D00 /* libPods-OpenCVIntegrate.a */; };
@@ -39,6 +42,12 @@
 		383ED34B805DA0709AA8EA19 /* libPods-OpenCVIntegrate-OpenCVIntegrateTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenCVIntegrate-OpenCVIntegrateTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		516CEEE35D196E96841C9B49 /* Pods-OpenCVIntegrate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenCVIntegrate.release.xcconfig"; path = "Target Support Files/Pods-OpenCVIntegrate/Pods-OpenCVIntegrate.release.xcconfig"; sourceTree = "<group>"; };
 		587C27959B73046930D5829E /* Pods-OpenCVIntegrate-OpenCVIntegrateTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenCVIntegrate-OpenCVIntegrateTests.release.xcconfig"; path = "Target Support Files/Pods-OpenCVIntegrate-OpenCVIntegrateTests/Pods-OpenCVIntegrate-OpenCVIntegrateTests.release.xcconfig"; sourceTree = "<group>"; };
+		5E036F47273DBC63002A2857 /* RCTEventEmmiter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RCTEventEmmiter.m; path = OpenCVIntegrate/RCTEventEmmiter.m; sourceTree = "<group>"; };
+		5E036F49273DBC87002A2857 /* RCTEventEmmiter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RCTEventEmmiter.h; path = OpenCVIntegrate/RCTEventEmmiter.h; sourceTree = "<group>"; };
+		5E036F4D273DBE5D002A2857 /* Broker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Broker.h; path = OpenCVIntegrate/Broker.h; sourceTree = "<group>"; };
+		5E036F52273DC3EE002A2857 /* Broker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = Broker.mm; path = OpenCVIntegrate/Broker.mm; sourceTree = "<group>"; };
+		5E036F59273DCC24002A2857 /* Drawer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Drawer.cpp; path = OpenCVIntegrate/Drawer.cpp; sourceTree = "<group>"; };
+		5E036F5A273DCC24002A2857 /* Drawer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Drawer.hpp; path = OpenCVIntegrate/Drawer.hpp; sourceTree = "<group>"; };
 		7B573457CC8EDD28AEEBAE89 /* Pods-OpenCVIntegrate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenCVIntegrate.debug.xcconfig"; path = "Target Support Files/Pods-OpenCVIntegrate/Pods-OpenCVIntegrate.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = OpenCVIntegrate/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D21D943AEED1C8038D0F0D00 /* libPods-OpenCVIntegrate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenCVIntegrate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +95,9 @@
 		13B07FAE1A68108700A75B9A /* OpenCVIntegrate */ = {
 			isa = PBXGroup;
 			children = (
+				5E036F54273DC7B6002A2857 /* cpp */,
+				5E036F4C273DBE26002A2857 /* Brokers */,
+				5E036F4A273DBDFD002A2857 /* RCTModules */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -104,7 +116,6 @@
 				F0927D279FA56C0471BDF8DD /* Pods-OpenCVIntegrate-OpenCVIntegrateTests.debug.xcconfig */,
 				587C27959B73046930D5829E /* Pods-OpenCVIntegrate-OpenCVIntegrateTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -116,6 +127,33 @@
 				383ED34B805DA0709AA8EA19 /* libPods-OpenCVIntegrate-OpenCVIntegrateTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E036F4A273DBDFD002A2857 /* RCTModules */ = {
+			isa = PBXGroup;
+			children = (
+				5E036F47273DBC63002A2857 /* RCTEventEmmiter.m */,
+				5E036F49273DBC87002A2857 /* RCTEventEmmiter.h */,
+			);
+			name = RCTModules;
+			sourceTree = "<group>";
+		};
+		5E036F4C273DBE26002A2857 /* Brokers */ = {
+			isa = PBXGroup;
+			children = (
+				5E036F4D273DBE5D002A2857 /* Broker.h */,
+				5E036F52273DC3EE002A2857 /* Broker.mm */,
+			);
+			name = Brokers;
+			sourceTree = "<group>";
+		};
+		5E036F54273DC7B6002A2857 /* cpp */ = {
+			isa = PBXGroup;
+			children = (
+				5E036F59273DCC24002A2857 /* Drawer.cpp */,
+				5E036F5A273DCC24002A2857 /* Drawer.hpp */,
+			);
+			name = cpp;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -411,8 +449,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E036F53273DC3EE002A2857 /* Broker.mm in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				5E036F48273DBC63002A2857 /* RCTEventEmmiter.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				5E036F5B273DCC24002A2857 /* Drawer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +527,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = OpenCVIntegrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -511,6 +556,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = OpenCVIntegrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

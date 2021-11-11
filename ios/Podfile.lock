@@ -73,6 +73,7 @@ PODS:
   - fmt (6.2.1)
   - glog (0.3.5)
   - libevent (2.1.12)
+  - OpenCV (4.3.0)
   - OpenSSL-Universal (1.1.180)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -378,6 +379,7 @@ DEPENDENCIES:
   - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.99.0)
   - FlipperKit/SKIOSNetworkPlugin (= 0.99.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - OpenCV (~> 4.3.0)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -421,6 +423,7 @@ SPEC REPOS:
     - FlipperKit
     - fmt
     - libevent
+    - OpenCV
     - OpenSSL-Universal
     - TOCropViewController
     - YogaKit
@@ -507,6 +510,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  OpenCV: 681e0451c1e54c5930a8922277f817ed5d5ab459
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 5e9e85f48da8dd447f5834ce14c6799ea8c7f41a
@@ -537,6 +541,6 @@ SPEC CHECKSUMS:
   Yoga: 9a08effa851c1d8cc1647691895540bc168ea65f
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 03777f4da7854bf9e30fcde07759829c8f926b9e
+PODFILE CHECKSUM: 2e28a0926b566aeb18623cf03eef55452ff47101
 
 COCOAPODS: 1.11.2

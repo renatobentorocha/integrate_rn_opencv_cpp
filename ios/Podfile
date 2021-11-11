@@ -12,6 +12,9 @@ target 'OpenCVIntegrate' do
     :hermes_enabled => false
   )
 
+  #
+  pod 'OpenCV', '~> 4.3.0'
+  
   target 'OpenCVIntegrateTests' do
     inherit! :complete
     # Pods for testing
