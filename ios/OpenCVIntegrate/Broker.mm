@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Broker.h"
 #import "RCTEventEmmiter.h"
+#import "Listener.hpp"
+#import "Drawer.hpp"
 
 @implementation Broker {
-  
+  Listener * _listener;
+  Drawer * _drawer;
 }
 
 - (NSString *)imageToBase64:(UIImage *)image {
@@ -25,19 +28,19 @@
   [RCTEventEmmiter sendEventWithName:OSEventString(UpdatedImage) withBody:@{@"image_base_64": base64Str}];
 }
 
-- (void)start {
++ (void)start {
   
 }
 
-- (void)load:(UIImage *)image {
++ (void)load:(UIImage *)image {
   
 }
 
-- (void)toGray:(UIImage *)image {
++ (void)toGray:(UIImage *)image {
   
 }
 
-- (void)connectedComponents:(UIImage *)image {
++ (void)connectedComponents:(UIImage *)image {
   
 }
 

@@ -2,23 +2,25 @@
 //  Drawer.hpp
 //  OpenCVIntegrate
 //
-//  Created by Renato Rocha on 11/11/21.
+//  Created by Renato Rocha on 12/11/21.
 //
 
 #ifndef Drawer_hpp
 #define Drawer_hpp
 
 #include <stdio.h>
-#include <functional>
-#include "opencv2/imgproc.hpp"
-#include "opencv2/core.hpp"
+#include "Listener.hpp"
+#include <opencv2/opencv.hpp>
+
 
 class Drawer {
-  std::function<void(cv::Mat result)> _listener;
+  Listener _listener;
+  void toGray(cv::Mat src, cv::Mat &dst);
   
 public:
-  Drawer(std::function<void(cv::Mat result)> listener);
-  void draw(cv::Mat result);
+  Drawer(Listener listener) : _listener {listener} {};
+  void toGray(cv::Mat src);
+  void connectedComponents(cv::Mat src);
 };
 
 #endif /* Drawer_hpp */
