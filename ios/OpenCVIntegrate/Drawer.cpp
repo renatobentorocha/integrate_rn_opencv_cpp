@@ -11,7 +11,7 @@
 void Drawer::toGray(cv::Mat src) {
   cv::Mat dst;
   toGray(src, dst);
-  _listener.run(dst);
+  _listener->run(dst);
 }
 
 void Drawer::toGray(cv::Mat src, cv::Mat &dst) {

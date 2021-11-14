@@ -11,10 +11,26 @@
 #import "RCTEventEmmiter.h"
 #import "Listener.hpp"
 #import "Drawer.hpp"
+#import "opencv2/imgcodecs/ios.h"
 
 @implementation Broker {
   Listener * _listener;
   Drawer * _drawer;
+  UIImage * image;
+}
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    _listener = new Listener([self](cv::Mat result){
+      cv::Mat mat = result.clone();
+      self->image = MatToUIImage(mat);
+    });
+    
+    _drawer = new Drawer(_listener);
+  }
+  return self;
 }
 
 - (NSString *)imageToBase64:(UIImage *)image {
@@ -28,20 +44,24 @@
   [RCTEventEmmiter sendEventWithName:OSEventString(UpdatedImage) withBody:@{@"image_base_64": base64Str}];
 }
 
-+ (void)start {
+- (void)start {
   
 }
 
-+ (void)load:(UIImage *)image {
+- (void)load:(UIImage *)image {
   
 }
 
-+ (void)toGray:(UIImage *)image {
+- (void)toGray:(UIImage *)image {
   
 }
 
-+ (void)connectedComponents:(UIImage *)image {
+- (void)connectedComponents:(UIImage *)image {
   
+}
+
+- (void) didUpdate {
+  [self->_delegate didUpdate:self->image];
 }
 
 @end

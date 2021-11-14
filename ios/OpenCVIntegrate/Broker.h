@@ -8,12 +8,20 @@
 #ifndef Broker_h
 #define Broker_h
 
+@protocol BrokerDelegate <NSObject>
+
+- (void) didUpdate:(UIImage *)Image;
+
+@end
+
 @interface Broker : NSObject
 
-+ (void)start;
-+ (void)load:(UIImage *)image;
-+ (void)toGray:(UIImage *)image;
-+ (void)connectedComponents:(UIImage *)image;
+@property(weak) id<BrokerDelegate> delegate;
+
+- (void)start;
+- (void)load:(UIImage *)image;
+- (void)toGray:(UIImage *)image;
+- (void)connectedComponents:(UIImage *)image;
 
 @end
 
