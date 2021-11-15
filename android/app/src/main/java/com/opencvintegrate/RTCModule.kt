@@ -109,7 +109,8 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
     @ReactMethod
     fun toOriginal(promise: Promise) {
         try {
-            onUpdateListener(original)
+            copy = original.copy(original.config, true)
+            NativeLib.load(copy)
         } catch (e: Exception) {
             promise.reject("LOAD_ERROR", e.message)
         }
