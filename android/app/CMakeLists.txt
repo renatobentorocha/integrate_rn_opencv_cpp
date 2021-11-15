@@ -23,6 +23,8 @@ add_library(
         native-lib
         SHARED
         src/main/cpp/native-lib.cpp
+        src/main/cpp/Drawer.cpp
+        src/main/cpp/Listener.cpp
 )
 
 find_library(

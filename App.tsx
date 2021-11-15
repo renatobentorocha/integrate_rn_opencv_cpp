@@ -21,7 +21,6 @@ export default function App() {
 
   const subscribeToUpdate = useCallback(
     async (event: {image_base_64: string}) => {
-      console.log(event.image_base_64);
       setImage(`data:image/jpeg;base64,${event.image_base_64}`);
     },
     [],

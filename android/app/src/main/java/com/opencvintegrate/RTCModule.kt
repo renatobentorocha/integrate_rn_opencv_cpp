@@ -15,6 +15,7 @@ import android.util.Log
 import androidx.annotation.Nullable
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import android.media.ExifInterface
+import com.facebook.react.bridge.ReactMethod
 
 enum class OSNotificationEventTypes {
     UpdatedImage,
@@ -37,8 +38,8 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
     }
 
     @ReactMethod
-    fun init(){
-        NativeLib.init {
+    fun start(){
+        NativeLib.start {
             if(it!= null) {
                 onUpdateListener(it)
             }
@@ -53,16 +54,26 @@ class RTCModule (private var context: ReactApplicationContext): ReactContextBase
     }
 
     @ReactMethod
+    fun addListener(eventName: String?) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
+    fun removeListeners(count: Int?) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
     fun load(imageUrl: String, exif: Int, promise: Promise) {
         try {
             val uri = Uri.parse(imageUrl)
             val bitmap = bitmapFromUri(uri)
 
             if(bitmap != null) {
-                this.original = bitmap.copy(bitmap.config, true)
                 val rotated = rotate(bitmap, bitmap.width, bitmap.height, getDegreeImageOrientation(exif))
 
                 if (rotated != null) {
+                    this.original = rotated.copy(bitmap.config, true)
                     this.copy = rotated.copy(rotated.config, true)
                 }
 
