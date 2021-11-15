@@ -4,25 +4,25 @@
 //
 //  Created by Renato Rocha on 11/11/21.
 //
+#import <UIKit/UIKit.h>
 
-#ifndef Broker_h
-#define Broker_h
+#ifndef BrokerRight_h
+#define BrokerRight_h
 
 @protocol BrokerDelegate <NSObject>
 
-- (void) didUpdate:(UIImage *)Image;
+- (void) didUpdate:(UIImage *)image;
 
 @end
 
-@interface Broker : NSObject
+@interface BrokerRight : NSObject
 
 @property(weak) id<BrokerDelegate> delegate;
 
-- (void)start;
 - (void)load:(UIImage *)image;
 - (void)toGray:(UIImage *)image;
 - (void)connectedComponents:(UIImage *)image;
 
 @end
 
-#endif /* Broker_h */
+#endif /* BrokerRight_h */

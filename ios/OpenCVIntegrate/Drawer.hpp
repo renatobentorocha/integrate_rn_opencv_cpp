@@ -14,11 +14,13 @@
 
 
 class Drawer {
+  cv::Mat _mat;
   Listener *_listener;
   void toGray(cv::Mat src, cv::Mat &dst);
   
 public:
   Drawer(Listener *listener) : _listener {listener} {};
+  void load(cv::Mat mat);
   void toGray(cv::Mat src);
   void connectedComponents(cv::Mat src);
 };

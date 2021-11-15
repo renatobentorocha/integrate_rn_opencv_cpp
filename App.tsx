@@ -12,7 +12,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    nativeLib.init();
+    nativeLib.start();
     const subscribe = nativeLib.subscribeToUpdate(subscribeToUpdate);
 
     return () => subscribe.remove();
@@ -51,7 +51,7 @@ export default function App() {
       Orientation = (res.exif as {Orientation: string}).Orientation;
     }
 
-    nativeLib.load(res.path, parseInt(Orientation, 10));
+    nativeLib.load(res.path, parseInt(Orientation, 10) || 0);
   }
 
   function getActionButton() {

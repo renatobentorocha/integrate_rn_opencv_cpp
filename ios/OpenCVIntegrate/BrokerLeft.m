@@ -1,34 +1,24 @@
 //
-//  Broker.m
+//  BrokerLeft.m
 //  OpenCVIntegrate
 //
-//  Created by Renato Rocha on 11/11/21.
+//  Created by Renato Rocha on 15/11/21.
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import "Broker.h"
+#import "BrokerLeft.h"
 #import "RCTEventEmmiter.h"
-#import "Listener.hpp"
-#import "Drawer.hpp"
-#import "opencv2/imgcodecs/ios.h"
 
-@implementation Broker {
-  Listener * _listener;
-  Drawer * _drawer;
-  UIImage * image;
+@implementation BrokerLeft {
+  BrokerRight *broker;
 }
 
 - (instancetype)init
 {
   self = [super init];
   if (self) {
-    _listener = new Listener([self](cv::Mat result){
-      cv::Mat mat = result.clone();
-      self->image = MatToUIImage(mat);
-    });
-    
-    _drawer = new Drawer(_listener);
+    self->broker = [[BrokerRight alloc] init];
+    self->broker.delegate = self;
   }
   return self;
 }
@@ -39,30 +29,21 @@
   return base64Str;
 }
 
-- (void)simulatorDidUpdateImage:(UIImage *)image {
+- (void)didUpdate:(id)image {
   NSString *base64Str = [self imageToBase64:image];
   [RCTEventEmmiter sendEventWithName:OSEventString(UpdatedImage) withBody:@{@"image_base_64": base64Str}];
 }
 
-- (void)start {
-  
-}
-
 - (void)load:(UIImage *)image {
-  
+  [self->broker load:image];
 }
 
 - (void)toGray:(UIImage *)image {
-  
+  [self->broker toGray:image];
 }
 
 - (void)connectedComponents:(UIImage *)image {
-  
-}
-
-- (void) didUpdate {
-  [self->_delegate didUpdate:self->image];
+  [self->broker connectedComponents:image];
 }
 
 @end
-
