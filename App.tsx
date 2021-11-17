@@ -21,7 +21,7 @@ export default function App() {
 
   const subscribeToUpdate = useCallback(
     async (event: {image_base_64: string}) => {
-      setImage(`data:image/jpeg;base64,${event.image_base_64}`);
+      setImage(`${event.image_base_64}`);
     },
     [],
   );
@@ -84,7 +84,7 @@ export default function App() {
       <View style={styles.container}>
         <Image
           style={StyleSheet.absoluteFill}
-          source={{uri: image || undefined}}
+          source={{uri: `data:image/jpeg;base64,${image}` || undefined}}
         />
       </View>
       {getActionButton()}

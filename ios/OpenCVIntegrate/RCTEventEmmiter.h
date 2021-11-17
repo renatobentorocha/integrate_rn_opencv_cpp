@@ -18,7 +18,13 @@ typedef NS_ENUM(NSInteger, OSNotificationEventTypes) {
 #define OSNotificationEventTypesArray @[@"UpdatedImage"]
 #define OSEventString(enum) [OSNotificationEventTypesArray objectAtIndex:enum]
 
-@interface RCTEventEmmiter : RCTEventEmitter<RCTBridgeModule>
+@protocol EventEmmiterDelegate <NSObject>
+
+- (void) update:(UIImage *)image;
+
+@end
+
+@interface RCTEventEmmiter : RCTEventEmitter<RCTBridgeModule, EventEmmiterDelegate>
 
 + (void)sendEventWithName:(NSString *)name withBody:(NSDictionary *)body;
 

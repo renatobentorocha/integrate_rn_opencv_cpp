@@ -30,6 +30,7 @@
 }
 
 - (void)didUpdate:(id)image {
+  [self->_delegate update:[image copy]];
   NSString *base64Str = [self imageToBase64:image];
   [RCTEventEmmiter sendEventWithName:OSEventString(UpdatedImage) withBody:@{@"image_base_64": base64Str}];
 }

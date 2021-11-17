@@ -8,8 +8,11 @@
 #ifndef BrokerLeft_h
 #define BrokerLeft_h
 #import "BrokerRight.h"
+#import "RCTEventEmmiter.h"
 
 @interface BrokerLeft : NSObject<BrokerDelegate>
+
+@property(weak) id<EventEmmiterDelegate> delegate;
 
 - (void)load:(UIImage *)image;
 - (void)toGray:(UIImage *)image;

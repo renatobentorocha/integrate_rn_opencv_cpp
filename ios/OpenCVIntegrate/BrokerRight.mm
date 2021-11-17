@@ -46,7 +46,7 @@
   self->_drawer->toGray(mat);
 }
 
-- (void)connectedComponents:(UIImage *)image {
+- (void)connectedComponents:(UIImage *)image {  
   cv::Mat mat;
   UIImageToMat(image, mat);
   self->_drawer->connectedComponents(mat);

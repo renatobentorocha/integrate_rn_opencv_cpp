@@ -21,6 +21,8 @@
 -(instancetype)init {
     if (self = [super init]) {
       self->broker = [[BrokerLeft alloc] init];
+      self->broker.delegate = self;
+      
       for (NSString *eventName in [self supportedEvents])
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(emitEvent:) name:eventName object:nil];
     }
@@ -52,6 +54,12 @@
     return events;
 }
 
+#pragma mark Delegate
+
+- (void)update:(UIImage *)image {
+  self->copy = image;
+}
+
 #pragma mark Send Event Methods
 
 - (void)emitEvent:(NSNotification *)notification {
@@ -80,8 +88,6 @@ RCT_EXPORT_METHOD(start){
 
 RCT_EXPORT_METHOD(load:(NSString *)imageUrl exif:(double)exif resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject){
   @try {
-    NSLog(@"LOAD STR %@: ", imageUrl);
-    
     UIImage * image = [UIImage imageWithContentsOfFile:imageUrl];
     self->original = [image copy];
     self->copy = image;
