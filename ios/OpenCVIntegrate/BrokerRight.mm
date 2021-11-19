@@ -49,6 +49,10 @@
 - (void)connectedComponents:(UIImage *)image {  
   cv::Mat mat;
   UIImageToMat(image, mat);
+  
+  NSLog(@"Type: %d: ", mat.type());
+  NSLog(@"Channel: %d: ", mat.channels());
+  
   self->_drawer->connectedComponents(mat);
 }
 

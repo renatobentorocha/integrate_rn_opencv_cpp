@@ -20,18 +20,20 @@ void Drawer::toGray(cv::Mat src) {
 }
 
 void Drawer::toGray(cv::Mat src, cv::Mat &dst) {
-  cv::cvtColor(src, dst, cv::COLOR_BGR2GRAY);
+  if(src.channels()==1){
+    cv::cvtColor(src, dst, cv::COLOR_GRAY2BGR);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+  } else {
+    cv::cvtColor(src, dst, cv::COLOR_BGR2GRAY);
+  }
 }
 
 void Drawer::connectedComponents(cv::Mat src) {
   cv::Mat img = src;
 
-  cv::Mat result;
-  img.copyTo(result);
-
   // Create binary image from source image
   cv::Mat bw;
-  cv::cvtColor(img, bw, cv::COLOR_BGR2GRAY);
+  toGray(img, bw);
   cv::threshold(bw, bw, 0, 255, cv::THRESH_BINARY_INV + cv::THRESH_OTSU);
 
   // Perform the distance transform algorithm
